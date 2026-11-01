@@ -1,0 +1,21 @@
+name = "NestedGainPhaseExample"
+uuid = "8ee347e0-7c9d-4f24-9eb1-00aab8677820"
+version = "0.1.0"
+authors = ["antonponmath <anton.pon.math@gmail.com>"]
+
+[deps]
+CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+ControlSystemsBase = "aaaaaaaa-a6ca-5380-bf3e-84a91bcd477e"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+PhaseSectors = "f9c7c7d5-39dd-4236-92f6-66d0328180c7"
+TeXLayout = "2da61a13-e1b6-4a6f-954d-3ae4b998419f"
+
+[sources]
+PhaseSectors = {rev = "main", url = "https://github.com/antonponmath/PhaseSectors.jl.git"}
+
+[compat]
+CairoMakie = "0.15.17"
+ControlSystemsBase = "1.25.3"
+LinearAlgebra = "1.13.0"
+PhaseSectors = "0.1.0"
+TeXLayout = "0.3.2"
