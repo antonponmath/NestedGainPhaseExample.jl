@@ -11,7 +11,7 @@ PhaseSectors = "f9c7c7d5-39dd-4236-92f6-66d0328180c7"
 TeXLayout = "2da61a13-e1b6-4a6f-954d-3ae4b998419f"
 
 [sources]
-PhaseSectors = {rev = "main", url = "https://github.com/antonponmath/PhaseSectors.jl.git"}
+PhaseSectors = {rev = "v0.1.0", url = "https://github.com/antonponmath/PhaseSectors.jl.git"}
 
 [compat]
 CairoMakie = "0.15.17"
