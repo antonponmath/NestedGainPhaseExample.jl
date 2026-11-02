@@ -125,14 +125,14 @@ function compute_inner_unity(; γ1, Φ1, W1inv, c1inv, γ2, Φ2, μ1_range)
         )
     end
 
-    μ2_outer_gain_compliant = (μ1, μ1_inner_compliant, γ1, c1inv, Φ1, γ2) ->
-    μ1 ≥ μ1_inner_compliant ? 0.0 : 1 / (γ2 * γ_inner(μ1, γ1, c1inv, Φ1))
+    μ2_outer_gain_compliant = (μ1, γ1, c1inv, Φ1, γ2) ->
+    1 / (γ2 * γ_inner(μ1, γ1, c1inv, Φ1))
 
     return ensure_either(
-        min.(μ1_inner_compliant, μ1_outer_phase_compliant),
+        μ1_outer_phase_compliant,
         μ2_outer_gain_compliant,
-        tuple.(μ1_inner_compliant, γ1, c1inv, Φ1, γ2);
-        given1 = μ1_range
+        tuple.(γ1, c1inv, Φ1, γ2);
+        given1 = μ1_range[μ1_range .< minimum(μ1_inner_compliant)]
     )
 end
 
@@ -169,17 +169,16 @@ function compute_outer_unity(; γ1, Φ1, W1inv, c1inv, γ2, Φ2, W2, μ1_bounds,
         )
     end
 
-    μ1_outer_gain_compliant = (μ1μ2, μ1μ2_inner_compliant, γ1, γ2, c1inv, Φ1, Φ2) ->
-    μ1μ2 ≥ μ1μ2_inner_compliant ? 0.0 :
-        1 / γ_inner(μ1μ2, γ1, γ2, c1inv, Φ1, Φ2)
+    μ1_outer_gain_compliant = (μ1μ2, γ1, γ2, c1inv, Φ1, Φ2) ->
+    1 / γ_inner(μ1μ2, γ1, γ2, c1inv, Φ1, Φ2)
 
     return [
         (min(μ1, μ1_bounds[2]), μ1μ2 / min(μ1, μ1_bounds[2]))
             for (μ1, μ1μ2) in ensure_either(
                 μ1_outer_gain_compliant,
-                min.(μ1μ2_inner_compliant, μ1μ2_outer_phase_compliant),
-                tuple.(μ1μ2_inner_compliant, γ1, γ2, c1inv, Φ1, Φ2);
-                given2 = μ1μ2_range
+                μ1μ2_outer_phase_compliant,
+                tuple.(γ1, γ2, c1inv, Φ1, Φ2);
+                given2 = μ1μ2_range[μ1μ2_range .< minimum(μ1μ2_inner_compliant)]
             )
             if μ1 > 0
     ]
