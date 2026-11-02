@@ -40,27 +40,36 @@ function plot_results(;
 
     fonts_latex, fonts_makie = _tac_fonts()
     set_default_font_family!(fonts_latex)
-    set_theme!(fonts = fonts_makie)
+    set_theme!(
+        fonts = fonts_makie,
+        fontsize = 10
+    )
 
-    fig = Figure()
+    inch = 72
+    fig = Figure(
+        size = (3.4inch, 8.3inch),
+        figure_padding = (0, 0.1inch, 0, 0)
+    )
 
     ax_gain = Axis(
         fig[1, 1], xscale = log10, yscale = log10,
-        limits = (ω_bounds, (10^(-2), 10^(0.1))),
+        limits = (ω_bounds, (10^(-2), 10^(0.15))),
         title = "Gain",
         xlabel = L"\omega \text{ (rad/s)}",
         yticks = LogTicks(-2:0),
         yminorticks = IntervalsBetween(10), yminorgridvisible = true,
-        xminorticks = IntervalsBetween(10), xminorgridvisible = true
+        xminorticks = IntervalsBetween(10), xminorgridvisible = true,
+        height = 1.2inch
     )
     ax_phase = Axis(
         fig[2, 1], xscale = log10,
-        limits = (ω_bounds, (-1.1π, 1.1π)),
+        limits = (ω_bounds, (-1.15π, 1.15π)),
         title = "Phase Sector",
         xlabel = L"\omega \text{ (rad/s)}",
         yticks = (π * (-1:1), [L"[π]", L"[0]", L"[π]"]),
         xminorticks = IntervalsBetween(10), xminorgridvisible = true,
-        yminorticks = IntervalsBetween(4), yminorgridvisible = true
+        yminorticks = IntervalsBetween(4), yminorgridvisible = true,
+        height = 1.8inch
     )
     ax_dom = Axis(
         fig[3, 1], xscale = log10, yscale = log10,
@@ -69,7 +78,7 @@ function plot_results(;
         xlabel = L"\mu_1 \text{ (log scale)}",
         ylabel = L"\mu_2 \text{ (log scale)}",
         xlabelpadding = -8,
-        ylabelpadding = -8,
+        ylabelpadding = -5,
         xticks = logrange(1.0e0, 1.0e1; length = 2),
         yticks = logrange(1.0e0, 1.0e1; length = 2),
         xminorticks = IntervalsBetween(10), xminorgridvisible = true,
@@ -89,7 +98,12 @@ function plot_results(;
         label = L"\Vert \mathrm\mathbf{G}_2 \Vert"
     )
 
-    axislegend(ax_gain; position = :lb)
+    axislegend(
+        ax_gain;
+        position = :lb,
+        padding = (4, 4, 4, 4),
+        patchsize = (20, 0)
+    )
 
     ## PHASE
 
@@ -111,13 +125,15 @@ function plot_results(;
 
     axislegend(
         ax_phase, [
-            PolyElement(color = _COL[:G1_FILL], strokecolor = _COL[:G1_LINE], strokewidth = 2),
-            PolyElement(color = _COL[:G2_FILL], strokecolor = _COL[:G2_LINE], strokewidth = 2),
+            PolyElement(color = _COL[:G1_FILL], strokecolor = _COL[:G1_LINE], strokewidth = 1),
+            PolyElement(color = _COL[:G2_FILL], strokecolor = _COL[:G2_LINE], strokewidth = 1),
         ], [
             L"\Phi(\mathrm\mathbf{G}_1)",
             L"\Phi(\mathrm\mathbf{G}_2)",
         ];
-        position = :lt
+        position = :lt,
+        padding = (4, 4, 4, 4),
+        patchsize = (15, 15)
     )
 
     ## DOMAIN
@@ -130,10 +146,9 @@ function plot_results(;
     translate!(bg_dom, 0, 0, -100)
     text!(
         [tuple.(μ1_bounds, μ2_bounds)...];
-        offset = [(25, 20), (-25, -20)],
+        offset = [(25, 18), (-25, -18)],
         text = ["stable", "unstable"],
         font = :sansitalic,
-        fontsize = 14,
         color = [_COL[:STABLE_TEXT], _COL[:UNSTABLE_TEXT]],
         align = [(:left, :bottom), (:right, :top)]
     )
@@ -172,17 +187,14 @@ function plot_results(;
             L"(\mu_1 \mathrm\mathbf{G}_1 \:⇌\: \mathrm{I}) \:⇌\: \mu_2 \mathrm\mathbf{G}_2",
             L"(\mu_1 \mathrm\mathbf{G}_1 \:⇌\: \mu_2 \mathrm\mathbf{G}_2) \:⇌\: \mathrm{I}",
         ],
-        framevisible = false
+        framevisible = false,
+        padding = (0, 0, 0, 3),
+        patchsize = (20, 0),
+        tellheight = true,
+        tellwidth = false
     )
 
-    rowsize!(fig.layout, 1, 130)
-    rowsize!(fig.layout, 2, 160)
-    rowsize!(fig.layout, 3, 180)
-    rowsize!(fig.layout, 4, 70)
-    colsize!(fig.layout, 1, 250)
-
-    resize_to_layout!(fig)
-    resize!(fig, 303, size(fig.scene)[2])
+    rowgap!(fig.layout, 5)
 
     return fig
 end
