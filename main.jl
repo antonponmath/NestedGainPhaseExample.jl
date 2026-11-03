@@ -1,4 +1,5 @@
 using ControlSystemsBase: tf, pade, ss
+using CairoMakie: save
 using NestedGainPhaseExample
 
 
@@ -78,8 +79,12 @@ end
 
 ## DRAWING
 
-plot_results(;
+fig = plot_results(;
     ω, γ1, γ2, Φ1, Φ2,
     μ1_bounds, μ2_bounds,
     dom_simple, dom_parallel, dom_inner_unity, dom_outer_unity, dom_sampling
 )
+
+save("fig.png", fig)
+
+fig
