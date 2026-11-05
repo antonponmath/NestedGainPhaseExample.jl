@@ -8,18 +8,18 @@ using PhaseSectors: PhaseSector, sectors!
 
 
 const _COL = Dict(
-    :G1_LINE => :firebrick3,
-    :G2_LINE => :steelblue,
-    :G1_FILL => (:firebrick3, 0.1),
-    :G2_FILL => (:steelblue, 0.1),
-    :SIMPLE => :black,
-    :PARALLEL => :gray40,
-    :INNER_UNITY => :deepskyblue3,
-    :OUTER_UNITY => :firebrick1,
-    :STABLE_FILL => :peachpuff,
-    :UNSTABLE_FILL => :cadetblue4,
-    :STABLE_TEXT => :chocolate4,
-    :UNSTABLE_TEXT => :lightcyan2,
+    :G1_LINE => :lightcoral,
+    :G2_LINE => :cornflowerblue,
+    :G1_FILL => (:lightcoral, 0.1),
+    :G2_FILL => (:cornflowerblue, 0.1),
+    :SIMPLE => :darkslategray,
+    :PARALLEL => :darkslategray,
+    :INNER_UNITY => :dodgerblue,
+    :OUTER_UNITY => :indianred,
+    :STABLE_FILL => :lavenderblush,
+    :UNSTABLE_FILL => :thistle,
+    :STABLE_TEXT => :thistle4,
+    :UNSTABLE_TEXT => :thistle4,
 )
 
 function plot_results(;
@@ -148,7 +148,7 @@ function plot_results(;
         [tuple.(μ1_bounds, μ2_bounds)...];
         offset = [(25, 18), (-25, -18)],
         text = ["stable", "unstable"],
-        font = :sansitalic,
+        font = :sansbolditalic,
         color = [_COL[:STABLE_TEXT], _COL[:UNSTABLE_TEXT]],
         align = [(:left, :bottom), (:right, :top)]
     )
