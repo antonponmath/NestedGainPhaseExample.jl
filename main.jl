@@ -20,7 +20,7 @@ function construct_system(p1, p2, f1, f2)
 end
 
 G1, G1ss = construct_system(
-    0.1 * g(10) * d(0.9),
+    0.1 * g(10) * d(1.1),
     0.07 * g(20) * d(1),
     0.9 * h(1),
     0.8 * h(2)
@@ -29,8 +29,8 @@ G1, G1ss = construct_system(
 G2, G2ss = construct_system(
     1.0 * g(2) * h(0.4),
     0.7 * g(1) * h(0.2),
-    0.2,
-    0.3
+    0.3,
+    0.4
 )
 
 
@@ -41,10 +41,10 @@ G2, G2ss = construct_system(
 
 Ns = 500
 
-μ1_bounds = (10^(-0.1), 10^(1.1))
+μ1_bounds = (1, 10)
 μ1_range = logrange(μ1_bounds...; length = Ns)
 
-μ2_bounds = (10^(-0.2), 10^(1.1))
+μ2_bounds = (0.1, 10)
 μ2_range = logrange(μ2_bounds...; length = Ns)
 
 μ1μ2_range = logrange((μ1_bounds .* μ2_bounds)...; length = Ns)
