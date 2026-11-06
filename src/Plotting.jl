@@ -8,18 +8,18 @@ using PhaseSectors: PhaseSector, sectors!
 
 
 const _COL = Dict(
-    :G1_LINE => :lightcoral,
+    :G1_LINE => :indianred,
     :G2_LINE => :cornflowerblue,
-    :G1_FILL => (:lightcoral, 0.1),
+    :G1_FILL => (:indianred, 0.1),
     :G2_FILL => (:cornflowerblue, 0.1),
     :SIMPLE => :darkslategray,
     :PARALLEL => :darkslategray,
-    :INNER_UNITY => :dodgerblue,
+    :INNER_UNITY => :cornflowerblue,
     :OUTER_UNITY => :indianred,
     :STABLE_FILL => :lavenderblush,
-    :UNSTABLE_FILL => :thistle,
+    :UNSTABLE_FILL => :thistle4,
     :STABLE_TEXT => :thistle4,
-    :UNSTABLE_TEXT => :thistle4,
+    :UNSTABLE_TEXT => :lavenderblush,
 )
 
 function plot_results(;
@@ -42,7 +42,8 @@ function plot_results(;
     set_default_font_family!(fonts_latex)
     set_theme!(
         fonts = fonts_makie,
-        fontsize = 10
+        fontsize = 10,
+        linewidth = 1
     )
 
     inch = 72
@@ -53,9 +54,9 @@ function plot_results(;
 
     ax_gain = Axis(
         fig[1, 1], xscale = log10, yscale = log10,
-        limits = (ω_bounds, (10^(-2), 10^(0.15))),
-        title = "Gain",
-        xlabel = L"\omega \text{ (rad/s)}",
+        limits = (ω_bounds, (10^(-2.15), 10^(0.15))),
+        title = "Gain and phase sector",
+        xticksvisible = false, xticklabelsvisible = false,
         yticks = LogTicks(-2:0),
         yminorticks = IntervalsBetween(10), yminorgridvisible = true,
         xminorticks = IntervalsBetween(10), xminorgridvisible = true,
@@ -64,7 +65,6 @@ function plot_results(;
     ax_phase = Axis(
         fig[2, 1], xscale = log10,
         limits = (ω_bounds, (-1.15π, 1.15π)),
-        title = "Phase Sector",
         xlabel = L"\omega \text{ (rad/s)}",
         yticks = (π * (-1:1), [L"[π]", L"[0]", L"[π]"]),
         xminorticks = IntervalsBetween(10), xminorgridvisible = true,
@@ -74,13 +74,13 @@ function plot_results(;
     ax_dom = Axis(
         fig[3, 1], xscale = log10, yscale = log10,
         limits = (μ1_bounds, μ2_bounds),
-        title = "Stability Domain",
+        title = "Stability domain",
         xlabel = L"\mu_1 \text{ (log scale)}",
         ylabel = L"\mu_2 \text{ (log scale)}",
         xlabelpadding = -8,
-        ylabelpadding = -5,
-        xticks = logrange(1.0e0, 1.0e1; length = 2),
-        yticks = logrange(1.0e0, 1.0e1; length = 2),
+        ylabelpadding = -12,
+        xticks = LogTicks(_log10_rounded_inward(μ1_bounds...)),
+        yticks = LogTicks(_log10_rounded_inward(μ2_bounds...)),
         xminorticks = IntervalsBetween(10), xminorgridvisible = true,
         yminorticks = IntervalsBetween(10), yminorgridvisible = true
     )
@@ -187,8 +187,12 @@ function plot_results(;
             L"(\mu_1 \mathrm\mathbf{G}_1 \:⇌\: \mathrm{I}) \:⇌\: \mu_2 \mathrm\mathbf{G}_2",
             L"(\mu_1 \mathrm\mathbf{G}_1 \:⇌\: \mu_2 \mathrm\mathbf{G}_2) \:⇌\: \mathrm{I}",
         ],
+        "Decomposition options:",
+        titlefont = :regular,
+        halign = :left,
+        titlehalign = :left,
         framevisible = false,
-        padding = (0, 0, 0, 3),
+        padding = (0, 0, 0, 0),
         patchsize = (20, 0),
         tellheight = true,
         tellwidth = false
@@ -228,5 +232,7 @@ function _tac_fonts()
 
     return fonts_latex, fonts_makie
 end
+
+_log10_rounded_inward = (a, b) -> [ceil(log10(a)), floor(log10(b))]
 
 end # module Plotting
